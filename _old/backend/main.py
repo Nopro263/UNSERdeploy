@@ -1,13 +1,12 @@
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from typing import List, Any
-import dotenv
 import os
+
+import deployment
 
 import hashlib
 import hmac
-
-dotenv.load_dotenv()
 
 def verify_signature(payload_body, secret_token, signature_header):
     """Verify that the payload was sent from GitHub by validating SHA256.
@@ -51,3 +50,7 @@ async def webhook(project: str, body: PushBody, request: Request):
     verify_signature(await request.body(), os.environ["SECRET"], request.headers.get("x-hub-signature-256"))
 
     print(project, body)
+
+@app.get("/create/{project:str}")
+async def create(project: str, url: str):
+    deployment.create_deployment(project, url)

