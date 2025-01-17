@@ -1,5 +1,6 @@
-from .parser import parse_text
+from .parser import parse_text, create_deployment
 
 __all__ = [
-    "parse_text"
+    "parse_text",
+    "create_deployment"
 ]

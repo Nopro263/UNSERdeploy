@@ -1,5 +1,5 @@
 from pydantic import BaseModel, RootModel, field_validator, model_validator
-from typing import List, Optional
+from typing import List, Optional, Union
 
 """Abomination of hacks to allow passing of dict with a single key that contains the real data"""
 class NamedObject(RootModel[dict]):
@@ -60,13 +60,19 @@ class Runtime(BaseModel):
     root: str
     expose: List[int]
 
+class _Install(BaseModel):
+    files: Optional[List[str]] = []
+    script: Optional[List[str]] = []
+
+Install = Union[List[str], _Install]
+
 class Job(NamedObject):
-    install: Optional[List[str]] = []
+    install: Install
     script: List[str]
     after_run: Optional[List[str]] = []
 
 class Configuration(BaseModel):
     runtime: Runtime
-    install: List[str]
+    install: Install
     jobs: List[Job]
     deployment: List[Job]

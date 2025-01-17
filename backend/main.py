@@ -1,4 +1,4 @@
-from deploy import parse_text
+from deploy import parse_text, create_deployment
 
 with open("example.yml") as f:
-    print(parse_text(f.read()))
+    create_deployment("example", parse_text(f.read()))

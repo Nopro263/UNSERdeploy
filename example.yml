@@ -1,13 +1,17 @@
 runtime:
   type: "python"
-  version: "3.12"
+  version: "3.12-bookworm"
   root: "/app"
   expose:
     - 80
 
 install:
-  - "pip install -r requirements.txt"
-  - "pip install -r testing_requirements.txt"
+  files:
+    - "requirements.txt"
+    - "testing_requirements.txt"
+  script:
+    - "pip install -r requirements.txt"
+    - "pip install -r testing_requirements.txt"
 
 jobs:
   - test:
